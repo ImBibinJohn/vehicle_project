@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <title>LoginPage</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script>
+        (function () {
+            window.onpageshow = function (event) {
+                if (event.persisted) {
+                    window.location.reload();
+                }
+            };
+        })();
+    </script>
+</head>
+<style>
+    .error {
+        color: red;
+    }
+</style>
+
+<body>
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-7 col-lg-5">
+                    <div class="wrap">
+                        <div class="login-wrap p-4 p-md-5">
+                            <div class="d-flex">
+                                <div class="w-100">
+                                    <h3 class="mb-4">LogIn</h3>
+                                </div>
+                            </div>
+                            {% if noemailerr %}
+                            <div class="error" id="error">This email<span style="color: blue;"> '{{noemailerr}}'
+                                </span>do Not match the Records</div>
+                            {% endif %}
+
+                            <form action="{% url 'login' %}" class="signin-form" method="post"
+                                enctype="multipart/form-data">
+                                {% csrf_token %}
+
+                                {% if emailerr %}
+                                <div class="form-group mt-3">
+                                    <label class="placeholder" for="username" style="color: #01d28e;">Email</label>
+                                    <input type="text" class="form-control" name="email" id="email" value="{{email}}"
+                                        placeholder="Email" required>
+                                    <div class="error" id="error">{{emailerr}}</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <input id="password" type="password" class="form-control" name="password" required>
+                                    <label class="form-control-placeholder mt-1" for="password">Password</label>
+                                    <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                                </div>
+                                {% elif passerr %}
+                                <div class="form-group mt-3">
+                                    <label class="placeholder" for="username" style="color: #01d28e;">Email</label>
+                                    <input type="text" class="form-control" name="email" id="email" value="{{email}}"
+                                        placeholder="Email" required>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <input id="password" type="password" class="form-control" name="password" required>
+                                    <label class="form-control-placeholder mt-1" for="password">Password</label>
+                                    <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                                </div>
+                                <div class="error" id="error" style="position: relative; margin-top: -5%;">{{passerr}}</div>
+
+                                {% else %}
+                                <div class="form-group mt-3">
+                                    <input type="text" class="form-control" name="email" id="email" required>
+                                    <label class="form-control-placeholder" for="username">Email</label>
+                                </div>
+
+                                <div class="form-group">
+                                    <input id="password" type="password" class="form-control" name="password" required>
+                                    <label class="form-control-placeholder mt-1" for="password">Password</label>
+                                    <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                                </div>
+                                {% endif %}
+
+                                <div class="form-group">
+                                    <button type="submit" class="form-control btn btn-primary rounded submit px-3">Sign
+                                        In</button>
+                                </div>
+                                <div class="form-group d-md-flex">
+                                    <div class="w-50 text-left">
+                                        <label class="checkbox-wrap checkbox-primary mb-0">Remember Me
+                                            <input type="checkbox" checked>
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <div class="w-50 text-md-right">
+                                        <a href="#">Forgot Password</a>
+                                    </div>
+                                </div>
+                            </form>
+                            <p class="text-center">Not a member? <a data-toggle="tab" href="#signup">Sign Up</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/popper.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>
