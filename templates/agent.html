@@ -1,21 +1,344 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agent</title>
-    <script>
-        window.history.pushState(null, null, window.location.href);
-        window.onpopstate = function () {
-            window.history.pushState(null, null, window.location.href);
-        };
-    </script>
+  <title>Vehicle Information Form</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script>
+    window.history.pushState(null, null, window.location.href);
+    window.onpopstate = function () {
+      window.history.pushState(null, null, window.location.href);
+    };
+  </script>
 </head>
+<style>
+  .error {
+    color: red;
+  }
+</style>
+
 <body>
-    {% for i in agent %}
-    <h3>welcome agent : {{i.username}}</h3>
+  <div class="container"> {% for i in agent %}
+    <h3>
+      welcome agent : {{i.username}}
+      <a href="{% url 'logout' %}">LogOut</a>
+    </h3>
     {% endfor %}
-    <a href="{% url 'logout' %}">LogOut</a>
+    <h2>Vehicle Information Form</h2>
+    <form action="" class="ajax" name="Form" method="post">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="vehicleRegistration">Vehicle Registration:</label>
+            <input type="text" class="form-control" id="vehicleRegistration" placeholder="Registration Number">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="vehicleYear">Vehicle Year:</label>
+            <input type="text" class="form-control" id="vehicleYear" placeholder="Year">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="vehicleMake">Vehicle Make:</label>
+            <input type="text" class="form-control" id="vehicleMake" placeholder="Vehicle Make">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="vehicleModel">Vehicle Model:</label>
+            <input type="text" class="form-control" id="vehicleModel" placeholder="Vehicle Model">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="color">Color:</label>
+            <input type="text" class="form-control" id="color" placeholder="color">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="mileage">Mileage:</label>
+            <input type="text" class="form-control" id="mileage" placeholder="Enter Mileage">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="vin Number">Vehicle Identification Number (VIN)</label>
+            <input type="text" class="form-control" id="vin_number" placeholder="Chassis Number" maxlength="17">
+            <div class="error" id="vinErr"></div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="nesw">Number Etched into side Windows:</label>
+            <input type="text" class="form-control" id="nesw" placeholder="Number Etched into side Windows">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="vehiclename">Vehicle Name:</label>
+            <input type="text" class="form-control" id="vehiclename" placeholder="Vehicle Name">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <h2 for="address">Owner Info</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" placeholder="Name">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="address">Address:</label>
+            <input type="text" class="form-control" id="address" placeholder="Address">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="state">District:</label>
+            <select class="form-control" id="districtSelect" onchange="showCities()">
+              <option value="">Select a District</option>
+              <option value="Alappuzha">Alappuzha</option>
+              <option value="Ernakulam">Ernakulam</option>
+              <option value="Idukki">Idukki</option>
+              <option value="Kannur">Kannur</option>
+              <option value="Kasaragod">Kasaragod</option>
+              <option value="Kollam">Kollam</option>
+              <option value="Kottayam">Kottayam</option>
+              <option value="Kozhikode">Kozhikode</option>
+              <option value="Malappuram">Malappuram</option>
+              <option value="Palakkad">Palakkad</option>
+              <option value="Pathanamthitta">Pathanamthitta</option>
+              <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+              <option value="Thrissur">Thrissur</option>
+              <option value="Wayanad">Wayanad</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="city">City:</label>
+            <select class="form-control" id="citySelect">
+            </select>
+            <h7 id="districtText" style="display: show;">**select a District First</h7>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="zip">Zip:</label>
+            <input type="number" class="form-control" id="zip" placeholder="Postal Code">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter Email">
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br>
+    <h2>Vehicle Information Table</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Vehicle Registration</th>
+          <th>Vehicle Year</th>
+          <th>Vehicle Model</th>
+          <th>Color</th>
+          <th>(VIN)Number</th>
+          <th>Vehicle Name</th>
+          <th>Name</th>
+          <th>Address</th>
+          <th>State</th>
+          <th>City</th>
+          <th>Zip</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Example row -->
+        <tr>
+          <td>ABC123</td>
+          <td>2023</td>
+          <td>Mustang</td>
+          <td>Red</td>
+          <td>1234567890</td>
+          <td>My Car</td>
+          <td>John Doe</td>
+          <td>123 Main St</td>
+          <td>California</td>
+          <td>Los Angeles</td>
+          <td>90001</td>
+          <td>johndoe@example.com</td>
+        </tr>
+        <!-- Add more rows dynamically if needed -->
+      </tbody>
+    </table>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $("#districtSelect").on("change", function() {
+        var selectedDistrict = $(this).val();
+
+        if (selectedDistrict === "") {
+          $("#districtText").show();
+        } else {
+          $("#districtText").hide();
+        }
+      });
+    });
+  </script>
+  <script>
+    $("body").on("submit", "form.ajax", function (e) {
+      e.preventDefault();
+
+      $form = $(this);
+      $url = $form.attr("action");
+      let regex = /^\S+@\S+\.\S+$/;
+      var vinPattern = /^MA3[A-HJ-NPR-Z0-9]{11}$/;
+
+      if (!$.trim(document.Form.vin_number.value)) {
+        printError("vinErr", "Please enter vin");
+      } else if (vinPattern.test(document.Form.vin_number.value) === false) {
+        printError("vinErr", "Invalid VIN. VIN should consist of 17 characters (letters A-Z and numbers 0-9).");
+      } else {
+        e.currentTarget.submit();
+      }
+
+    });
+
+    $("body").on("change keyup", "input,select,textarea", function (e) {
+      if ($.trim($(this).val())) {
+        $(this).nextAll("div.error").html("");
+      }
+    });
+    function printError(Id, Msg) {
+      document.getElementById(Id).innerHTML = Msg;
+    }
+
+    function showCities() {
+      var districtSelect = document.getElementById("districtSelect");
+      var citySelect = document.getElementById("citySelect");
+
+      // Clear previous options
+      citySelect.innerHTML = '<option value="">Select a City</option>';
+
+      // Get selected district value
+      var selectedDistrict = districtSelect.value;
+
+      // Add cities based on the selected district
+      if (selectedDistrict === "Alappuzha") {
+        addCityOption("Alappuzha", citySelect);
+        addCityOption("Chengannur", citySelect);
+        addCityOption("Kayamkulam", citySelect);
+        addCityOption("Mavelikara", citySelect);
+        addCityOption("Haripad", citySelect);
+      } else if (selectedDistrict === "Ernakulam") {
+        addCityOption("Kochi", citySelect);
+        addCityOption("Aluva", citySelect);
+        addCityOption("Angamaly", citySelect);
+        addCityOption("Perumbavoor", citySelect);
+        addCityOption("Kothamangalam", citySelect);
+      } else if (selectedDistrict === "Idukki") {
+        addCityOption("Idukki", citySelect);
+        addCityOption("Thodupuzha", citySelect);
+        addCityOption("Munnar", citySelect);
+        addCityOption("Nedumkandam", citySelect);
+        addCityOption("Adimali", citySelect);
+      } else if (selectedDistrict === "Kannur") {
+        addCityOption("Kannur", citySelect);
+        addCityOption("Thalassery", citySelect);
+        addCityOption("Mattannur", citySelect);
+        addCityOption("Iritty", citySelect);
+        addCityOption("Payyannur", citySelect);
+      } else if (selectedDistrict === "Kasaragod") {
+        addCityOption("Kasaragod", citySelect);
+        addCityOption("Kanhangad", citySelect);
+        addCityOption("Nileshwar", citySelect);
+        addCityOption("Cheruvathur", citySelect);
+        addCityOption("Manjeshwar", citySelect);
+      } else if (selectedDistrict === "Kollam") {
+        addCityOption("Kollam", citySelect);
+        addCityOption("Punalur", citySelect);
+        addCityOption("Karunagappally", citySelect);
+        addCityOption("Kottarakkara", citySelect);
+        addCityOption("Paravur", citySelect);
+      } else if (selectedDistrict === "Kottayam") {
+        addCityOption("Kottayam", citySelect);
+        addCityOption("Changanassery", citySelect);
+        addCityOption("Palai", citySelect);
+        addCityOption("Vaikom", citySelect);
+        addCityOption("Ettumanoor", citySelect);
+      } else if (selectedDistrict === "Kozhikode") {
+        addCityOption("Kozhikode", citySelect);
+        addCityOption("Vatakara", citySelect);
+        addCityOption("Koyilandy", citySelect);
+        addCityOption("Perambra", citySelect);
+        addCityOption("Ramanattukara", citySelect);
+      } else if (selectedDistrict === "Malappuram") {
+        addCityOption("Malappuram", citySelect);
+        addCityOption("Manjeri", citySelect);
+        addCityOption("Perinthalmanna", citySelect);
+        addCityOption("Tirur", citySelect);
+        addCityOption("Ponnani", citySelect);
+      } else if (selectedDistrict === "Palakkad") {
+        addCityOption("Palakkad", citySelect);
+        addCityOption("Ottapalam", citySelect);
+        addCityOption("Pattambi", citySelect);
+        addCityOption("Chittur-Thathamangalam", citySelect);
+        addCityOption("Shoranur", citySelect);
+      } else if (selectedDistrict === "Pathanamthitta") {
+        addCityOption("Pathanamthitta", citySelect);
+        addCityOption("Adoor", citySelect);
+        addCityOption("Thiruvalla", citySelect);
+        addCityOption("Ranni", citySelect);
+        addCityOption("Konni", citySelect);
+      } else if (selectedDistrict === "Thiruvananthapuram") {
+        addCityOption("Thiruvananthapuram", citySelect);
+        addCityOption("Neyyattinkara", citySelect);
+        addCityOption("Attingal", citySelect);
+        addCityOption("Nedumangad", citySelect);
+        addCityOption("Varkala", citySelect);
+      } else if (selectedDistrict === "Thrissur") {
+        addCityOption("Thrissur", citySelect);
+        addCityOption("Chalakudy", citySelect);
+        addCityOption("Kodungallur", citySelect);
+        addCityOption("Kunnamkulam", citySelect);
+        addCityOption("Irinjalakuda", citySelect);
+        addCityOption("Guruvayoor", citySelect);
+      } else if (selectedDistrict === "Wayanad") {
+        addCityOption("Kalpetta", citySelect);
+        addCityOption("Sulthan Bathery", citySelect);
+        addCityOption("Mananthavady", citySelect);
+        addCityOption("Vythiri", citySelect);
+        addCityOption("Meppadi", citySelect);
+      }
+    }
+
+    function addCityOption(city, selectElement) {
+      var option = document.createElement("option");
+      option.text = city;
+      option.value = city;
+      selectElement.add(option);
+    }
+  </script>
 </body>
+
 </html>
