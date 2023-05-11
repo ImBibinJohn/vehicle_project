@@ -26,5 +26,7 @@ class AgentVehicle(models.Model):
     zip_code = models.CharField(max_length=10)
     email = models.EmailField()
 
+    agent_id = models.PositiveIntegerField()
+
     def __str__(self):
         return self.vehicle_registration
