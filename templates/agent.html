@@ -2,8 +2,9 @@
 <html>
 
 <head>
-  <title>Vehicle Information Form</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Agent Vehicle Information Form</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script>
     window.history.pushState(null, null, window.location.href);
     window.onpopstate = function () {
@@ -18,28 +19,38 @@
 </style>
 
 <body>
-  <div class="container"> {% for i in agent %}
-    <h3>
-      welcome agent : {{i.username}}
-      <a href="{% url 'logout' %}">LogOut</a>
-    </h3>
+  <div class="container-fluid">
+    {% for i in agent %}
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">AGENT</a>
+      <div class="navbar-collapse justify-content-end">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#">{{i.username}}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          </li> 
+        </ul>
+      </div>
+    </nav>
     {% endfor %}
 
-    <h2>Vehicle Information Form</h2>
+
     {% if registered %}
+    <div class="row">
+      <div class="col-10">
+        <h2>Add Vehicle Information</h2>
+      </div>
+      <div class="col-2 mt-2">
+      </div>
+    </div><br>
     {{registered}}
     <form action="{% url 'agentVehicleAddForm' %}" class="ajax" name="Form" method="post">
       {% csrf_token %}
       <div class="row">
         <div class="col-md-4">
           <div class="form-group">
-            <label for="vehicleRegistration">Vehicle Registration:</label>
-            <input type="text" class="form-control" name="vehicleRegistration" value="{{vehicleRegistration}}"
-              id="vehicleRegistration" placeholder="Registration Number" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
             <label for="vehicleYear">Vehicle Year:</label>
             <input type="number" class="form-control" name="vehicleYear" id="vehicleYear" value="{{vehicleYear}}"
               placeholder="Year" required>
@@ -50,6 +61,13 @@
             <label for="vehicleMake">Vehicle Make:</label>
             <input type="text" class="form-control" name="vehicleMake" id="vehicleMake" value="{{vehicleMake}}"
               placeholder="Vehicle Make" required>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="nesw">Number Etched into side Windows:</label>
+            <input type="text" class="form-control" name="nesw" id="nesw" value="{{nesw}}"
+              placeholder="Number Etched into side Windows" required>
           </div>
         </div>
       </div>
@@ -79,21 +97,6 @@
       <div class="row">
         <div class="col-md-4">
           <div class="form-group">
-            <label for="vin Number">Vehicle Identification Number (VIN)</label>
-            <input type="text" class="form-control" name="vin_number" id="vin_number" value="{{vin_number}}"
-              placeholder="Chassis Number" maxlength="17" required>
-            <div class="error" id="vinErr">This Vehicle Identification Number (VIN) already registered</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="nesw">Number Etched into side Windows:</label>
-            <input type="text" class="form-control" name="nesw" id="nesw" value="{{nesw}}"
-              placeholder="Number Etched into side Windows" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
             <label for="vehiclename">Vehicle Name:</label>
             <input type="text" class="form-control" name="vehiclename" id="vehiclename" value="{{vehiclename}}"
               placeholder="Vehicle Name" required>
@@ -101,8 +104,16 @@
         </div>
         <div class="col-md-4">
           <div class="form-group">
-            <h2 for="address">Owner Info</h2>
+            <label for="vin Number">Vehicle Identification Number (VIN)</label>
+            <input type="text" class="form-control" name="vin_number" id="vin_number" value="{{vin_number}}"
+              placeholder="Chassis Number" maxlength="17" required>
+            <div class="error" id="vinErr">This Vehicle Identification Number (VIN) already registered</div>
           </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <h2 for="address">Owner Info</h2>
         </div>
       </div>
 
@@ -165,21 +176,22 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-success">Submit</button>
+      <a href="{% url 'agent' %}"><button type="button" class="btn btn-secondary">Cancel</button></a>
     </form>
     {% elif registered_id %}
+    <div class="row">
+      <div class="col-10">
+        <h2>Edit Vehicle Information</h2>
+      </div>
+      <div class="col-2 mt-2">
+      </div>
+    </div><br>
     <form action="{% url 'agentVehicleEditFormSubmit' veh_id %}" class="ajax" name="Form" method="post">
       {% csrf_token %}
       <div class="row">
         <div class="col-md-4">
           <div class="form-group">
-            <label for="vehicleRegistration">Vehicle Registration:</label>
-            <input type="text" class="form-control" name="vehicleRegistration" value="{{vehicleRegistration}}"
-              id="vehicleRegistration" placeholder="Registration Number" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
             <label for="vehicleYear">Vehicle Year:</label>
             <input type="number" class="form-control" name="vehicleYear" id="vehicleYear" value="{{vehicleYear}}"
               placeholder="Year" required>
@@ -190,6 +202,13 @@
             <label for="vehicleMake">Vehicle Make:</label>
             <input type="text" class="form-control" name="vehicleMake" id="vehicleMake" value="{{vehicleMake}}"
               placeholder="Vehicle Make" required>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="nesw">Number Etched into side Windows:</label>
+            <input type="text" class="form-control" name="nesw" id="nesw" value="{{nesw}}"
+              placeholder="Number Etched into side Windows" required>
           </div>
         </div>
       </div>
@@ -219,21 +238,6 @@
       <div class="row">
         <div class="col-md-4">
           <div class="form-group">
-            <label for="vin Number">Vehicle Identification Number (VIN)</label>
-            <input type="text" class="form-control" name="vin_number" id="vin_number" value="{{vin_number}}"
-              placeholder="Chassis Number" maxlength="17" required>
-            <div class="error" id="vinErr">This Vehicle Identification Number (VIN) already registered</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="nesw">Number Etched into side Windows:</label>
-            <input type="text" class="form-control" name="nesw" id="nesw" value="{{nesw}}"
-              placeholder="Number Etched into side Windows" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
             <label for="vehiclename">Vehicle Name:</label>
             <input type="text" class="form-control" name="vehiclename" id="vehiclename" value="{{vehiclename}}"
               placeholder="Vehicle Name" required>
@@ -241,8 +245,16 @@
         </div>
         <div class="col-md-4">
           <div class="form-group">
-            <h2 for="address">Owner Info</h2>
+            <label for="vin Number">Vehicle Identification Number (VIN)</label>
+            <input type="text" class="form-control" name="vin_number" id="vin_number" value="{{vin_number}}"
+              placeholder="Chassis Number" maxlength="17" required>
+            <div class="error" id="vinErr">This Vehicle Identification Number (VIN) already registered</div>
           </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <h2 for="address">Owner Info</h2>
         </div>
       </div>
 
@@ -305,20 +317,21 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-success">Submit</button>
+      <a href="{% url 'agent' %}"><button type="button" class="btn btn-secondary">Cancel</button></a>
     </form>
     {% elif vehicle_list_edit %}
+    <div class="row">
+      <div class="col-10">
+        <h2>Edit Vehicle Information</h2>
+      </div>
+      <div class="col-2 mt-2">
+      </div>
+    </div><br>
     {% for ve in vehicle_list_edit %}
     <form action="{% url 'agentVehicleEditFormSubmit' ve.id %}" class="ajax" name="Form" method="post">
       {% csrf_token %}
       <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehicleRegistration">Vehicle Registration:</label>
-            <input type="text" class="form-control" name="vehicleRegistration" value="{{ve.vehicle_registration}}"
-              id="vehicleRegistration" placeholder="Registration Number" required>
-          </div>
-        </div>
         <div class="col-md-4">
           <div class="form-group">
             <label for="vehicleYear">Vehicle Year:</label>
@@ -331,6 +344,13 @@
             <label for="vehicleMake">Vehicle Make:</label>
             <input type="text" class="form-control" name="vehicleMake" id="vehicleMake" value="{{ve.vehicle_make}}"
               placeholder="Vehicle Make" required>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="nesw">Number Etched into side Windows:</label>
+            <input type="text" class="form-control" name="nesw" id="nesw" value="{{ve.number_etched_into_windows}}"
+              placeholder="Number Etched into side Windows" required>
           </div>
         </div>
       </div>
@@ -360,33 +380,26 @@
       <div class="row">
         <div class="col-md-4">
           <div class="form-group">
+            <label for="vehiclename">Vehicle Name:</label>
+            <input type="text" class="form-control" name="vehiclename" id="vehiclename"
+              value="{{ve.number_etched_into_windows}}" placeholder="Vehicle Name" required>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
             <label for="vin Number">Vehicle Identification Number (VIN)</label>
             <input type="text" class="form-control" name="vin_number" id="vin_number" value="{{ve.vin_number}}"
               placeholder="Chassis Number" maxlength="17" required>
-              {% if registered_id %}
-              <div class="error" id="vinErr">This Vehicle Identification Number (VIN) already registered</div>
-              {% endif %}
-                
+            {% if registered_id %}
+            <div class="error" id="vinErr">This Vehicle Identification Number (VIN) already registered</div>
+            {% endif %}
+
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="nesw">Number Etched into side Windows:</label>
-            <input type="text" class="form-control" name="nesw" id="nesw" value="{{ve.number_etched_into_windows}}"
-              placeholder="Number Etched into side Windows" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehiclename">Vehicle Name:</label>
-            <input type="text" class="form-control" name="vehiclename" id="vehiclename" value="{{ve.number_etched_into_windows}}"
-              placeholder="Vehicle Name" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <h2 for="address">Owner Info</h2>
-          </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <h2 for="address">Owner Info</h2>
         </div>
       </div>
 
@@ -394,7 +407,8 @@
         <div class="col-md-4">
           <div class="form-group">
             <label for="name">Name:</label>
-            <input type="text" class="form-control" name="name" id="name" value="{{ve.name}}" placeholder="Name" required>
+            <input type="text" class="form-control" name="name" id="name" value="{{ve.name}}" placeholder="Name"
+              required>
           </div>
         </div>
         <div class="col-md-4">
@@ -437,32 +451,33 @@
         <div class="col-md-4">
           <div class="form-group">
             <label for="zip">Zip:</label>
-            <input type="number" class="form-control" name="zip" id="zip" value="{{ve.zip_code}}" placeholder="Postal Code"
-              required>
+            <input type="number" class="form-control" name="zip" id="zip" value="{{ve.zip_code}}"
+              placeholder="Postal Code" required>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
             <label for="email">Email:</label>
-            <input type="email" class="form-control" name="email" id="email" value="{{ve.email}}" placeholder="Enter Email"
-              required>
+            <input type="email" class="form-control" name="email" id="email" value="{{ve.email}}"
+              placeholder="Enter Email" required>
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-success">Submit</button>
+      <a href="{% url 'agent' %}"><button type="button" class="btn btn-secondary">Cancel</button></a>
     </form>
     {% endfor %}
     {% else %}
+    <div class="row">
+      <div class="col-10">
+        <h2>Add Vehicle Information</h2>
+      </div>
+      <div class="col-2 mt-2">
+      </div>
+    </div><br>
     <form action="{% url 'agentVehicleAddForm' %}" class="ajax" name="Form" method="post">
       {% csrf_token %}
       <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehicleRegistration">Vehicle Registration:</label>
-            <input type="text" class="form-control" name="vehicleRegistration" id="vehicleRegistration"
-              placeholder="Registration Number" required>
-          </div>
-        </div>
         <div class="col-md-4">
           <div class="form-group">
             <label for="vehicleYear">Vehicle Year:</label>
@@ -473,6 +488,13 @@
           <div class="form-group">
             <label for="vehicleMake">Vehicle Make:</label>
             <input type="text" class="form-control" name="vehicleMake" id="vehicleMake" placeholder="Vehicle Make"
+              required>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="nesw">Number Etched into side Windows:</label>
+            <input type="text" class="form-control" name="nesw" id="nesw" placeholder="Number Etched into side Windows"
               required>
           </div>
         </div>
@@ -501,21 +523,6 @@
       <div class="row">
         <div class="col-md-4">
           <div class="form-group">
-            <label for="vin Number">Vehicle Identification Number (VIN)</label>
-            <input type="text" class="form-control" name="vin_number" id="vin_number" placeholder="Chassis Number"
-              maxlength="17" required>
-            <div class="error" id="vinErr"></div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="nesw">Number Etched into side Windows:</label>
-            <input type="text" class="form-control" name="nesw" id="nesw" placeholder="Number Etched into side Windows"
-              required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
             <label for="vehiclename">Vehicle Name:</label>
             <input type="text" class="form-control" name="vehiclename" id="vehiclename" placeholder="Vehicle Name"
               required>
@@ -523,8 +530,16 @@
         </div>
         <div class="col-md-4">
           <div class="form-group">
-            <h2 for="address">Owner Info</h2>
+            <label for="vin Number">Vehicle Identification Number (VIN)</label>
+            <input type="text" class="form-control" name="vin_number" id="vin_number" placeholder="Chassis Number"
+              maxlength="17" required>
+            <div class="error" id="vinErr"></div>
           </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <h2 for="address">Owner Info</h2>
         </div>
       </div>
 
@@ -584,47 +599,10 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-success">Submit</button>
+      <a href="{% url 'listPageAgent' %}"><button type="button" class="btn btn-primary">Show List</button></a>
     </form>
     {% endif %}
-    <br>
-    <h2>Vehicle Information Table</h2>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Vehicle Registration</th>
-          <th>(VIN)Number</th>
-          <th>Vehicle Name</th>
-          <th>Name</th>
-          <th>Address</th>
-          <th>State</th>
-          <th>City</th>
-          <th>Zip</th>
-          <th>Email</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for veh in vehicle_list %}
-        <!-- Example row -->
-        <form action="{% url 'agentVehicleEditForm' veh.id %}" method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          <tr>
-            <td>{{veh.vehicle_registration}}</td>
-            <td>{{veh.vin_number}}</td>
-            <td>{{veh.vehicle_name}}</td>
-            <td>{{veh.name}}</td>
-            <td>{{veh.address}}</td>
-            <td>{{veh.state}}</td>
-            <td>{{veh.city}}</td>
-            <td>{{veh.zip_code}}</td>
-            <td>{{veh.email}}</td>
-            <td><button type="submit" class="btn btn-primary">Edit</button></td>
-          </tr>
-        </form>
-        {% endfor %}
-        <!-- Add more rows dynamically if needed -->
-      </tbody>
-    </table>
   </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
@@ -775,6 +753,8 @@
       selectElement.add(option);
     }
   </script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

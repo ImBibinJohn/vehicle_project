@@ -10,7 +10,7 @@ class UserDetails(models.Model):
         return self.username
 
 class AgentVehicle(models.Model):
-    vehicle_registration = models.CharField(max_length=50)
+    vehicle_registration = models.CharField(max_length=50 ,default="")
     vin_number = models.CharField(max_length=17)
     vehicle_year = models.PositiveIntegerField()
     vehicle_make = models.CharField(max_length=50)
@@ -27,6 +27,7 @@ class AgentVehicle(models.Model):
     email = models.EmailField()
 
     agent_id = models.PositiveIntegerField()
+    user_id = models.PositiveIntegerField()
 
     def __str__(self):
         return self.vehicle_registration

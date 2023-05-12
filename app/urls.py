@@ -10,6 +10,8 @@ urlpatterns = [
     re_path(r'^agent$', views.agent, name='agent'),
     re_path(r'^logout$', views.logout, name='logout'),
     re_path(r'^agentVehicleAddForm$', views.agentVehicleAddForm, name='agentVehicleAddForm'),
+    re_path(r'^listPageAgent$', views.listPageAgent, name='listPageAgent'),
     re_path(r'^agentVehicleEditForm/(?P<id>\d+)$', views.agentVehicleEditForm, name='agentVehicleEditForm'),
     re_path(r'^agentVehicleEditFormSubmit/(?P<id>\d+)$', views.agentVehicleEditFormSubmit, name='agentVehicleEditFormSubmit'),
+    re_path(r'^RTOVehicleRegNoAddForm/(?P<id>\d+)$', views.RTOVehicleRegNoAddForm, name='RTOVehicleRegNoAddForm'),
 ]

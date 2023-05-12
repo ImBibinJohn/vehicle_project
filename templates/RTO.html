@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RTO</title>
+    <title>RTO Vehicle Information Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         window.history.pushState(null, null, window.location.href);
         window.onpopstate = function () {
@@ -13,11 +12,92 @@
         };
     </script>
 </head>
+<style>
+    .error {
+        color: red;
+    }
+</style>
+
 <body>
-    {% for i in RTO %}
-    <h3>welcome RTO : {{i.username}}</h3>
-    {% endfor %}
-    <a href="{% url 'logout' %}">LogOut</a>
+    <div class="container-fluid">
+        {% for i in RTO %}
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">RTO</a>
+            <div class="navbar-collapse justify-content-end">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">{{i.username}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        {% endfor %}
+
+        <div class="row">
+            <div class="col-10">
+                <h2>Vehicle Information Form</h2>
+            </div>
+            <div class="col-2 mt-2">
+
+            </div>
+
+        </div><br>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Vehicle Registration</th>
+                    <th>(VIN)Number</th>
+                    <th>Vehicle Name</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>State</th>
+                    <th>City</th>
+                    <th>Agent Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for veh in vehicle_list %}
+                <!-- Example row -->
+                <form action="{% url 'RTOVehicleRegNoAddForm' veh.id %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <tr>
+                        {% if veh.vehicle_registration == "" %}
+                        <td>
+                            <div class="input-group">
+                                <input type="text" name="reg_num" class="form-control" placeholder="Enter Reg.No..." height="20px">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit">Add</button>
+                                </div>
+                            </div>
+                        </td>
+                        {% else %}
+                        <td>{{veh.vehicle_registration}}</td>
+                        {% endif %}
+                        <td>{{veh.vin_number}}</td>
+                        <td>{{veh.vehicle_name}}</td>
+                        <td>{{veh.name}}</td>
+                        <td>{{veh.email}}</td>
+                        <td>{{veh.address}}</td>
+                        <td>{{veh.state}}</td>
+                        <td>{{veh.city}}</td>
+                        {% for j in users %}
+                        {% if j.id == veh.agent_id %}
+                        <td>{{j.username}}</td>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                </form>
+                {% endfor %}
+                <!-- Add more rows dynamically if needed -->
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
