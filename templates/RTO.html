@@ -39,6 +39,9 @@
         <div class="row">
             <div class="col-10">
                 <h2>Vehicle Information Form</h2>
+                {% if reg_num %}
+                RegNo :<span style="color: red;"> '{{reg_num}}'</span> already exists!
+                {% endif %}
             </div>
             <div class="col-2 mt-2">
 
@@ -68,7 +71,8 @@
                         {% if veh.vehicle_registration == "" %}
                         <td>
                             <div class="input-group">
-                                <input type="text" name="reg_num" class="form-control" placeholder="Enter Reg.No..." height="20px">
+                                <input type="text" name="reg_num" class="form-control" placeholder="Enter Reg.No..."
+                                    height="20px">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" type="submit">Add</button>
                                 </div>

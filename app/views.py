@@ -105,28 +105,35 @@ def RTOVehicleRegNoAddForm(request, id):
             user_id = request.session['user_id']
             if request.method == "POST":
                 reg_num = request.POST['reg_num']
-                RTO = UserDetails.objects.filter(id=user_id)
-                users = UserDetails.objects.all()
-                get_vehicle = AgentVehicle.objects.get(id=id)
-                get_vehicle.vehicle_registration = reg_num
-                get_vehicle.vin_number = get_vehicle.vin_number
-                get_vehicle.vehicle_year = get_vehicle.vehicle_year
-                get_vehicle.vehicle_make = get_vehicle.vehicle_make
-                get_vehicle.vehicle_model = get_vehicle.vehicle_model
-                get_vehicle.color = get_vehicle.color
-                get_vehicle.mileage = get_vehicle.mileage
-                get_vehicle.number_etched_into_windows = get_vehicle.number_etched_into_windows
-                get_vehicle.vehicle_name = get_vehicle.vehicle_name
-                get_vehicle.name = get_vehicle.name
-                get_vehicle.address = get_vehicle.address
-                get_vehicle.state = get_vehicle.state
-                get_vehicle.city = get_vehicle.city
-                get_vehicle.zip_code = get_vehicle.zip_code
-                get_vehicle.email = get_vehicle.email
-                get_vehicle.agent_id = get_vehicle.agent_id
-                get_vehicle.user_id = get_vehicle.user_id
-                get_vehicle.save()
-                return redirect('RTO')
+                if AgentVehicle.objects.filter(vehicle_registration=reg_num).exists():
+                    reg_num = request.POST['reg_num']
+                    RTO = UserDetails.objects.filter(id=user_id)
+                    users = UserDetails.objects.all()
+                    vehicle_list = AgentVehicle.objects.all()
+                    return render(request, 'RTO.html', {'RTO': RTO, 'vehicle_list': vehicle_list, 'users': users,'reg_num':reg_num})
+                else:
+                    RTO = UserDetails.objects.filter(id=user_id)
+                    users = UserDetails.objects.all()
+                    get_vehicle = AgentVehicle.objects.get(id=id)
+                    get_vehicle.vehicle_registration = reg_num
+                    get_vehicle.vin_number = get_vehicle.vin_number
+                    get_vehicle.vehicle_year = get_vehicle.vehicle_year
+                    get_vehicle.vehicle_make = get_vehicle.vehicle_make
+                    get_vehicle.vehicle_model = get_vehicle.vehicle_model
+                    get_vehicle.color = get_vehicle.color
+                    get_vehicle.mileage = get_vehicle.mileage
+                    get_vehicle.number_etched_into_windows = get_vehicle.number_etched_into_windows
+                    get_vehicle.vehicle_name = get_vehicle.vehicle_name
+                    get_vehicle.name = get_vehicle.name
+                    get_vehicle.address = get_vehicle.address
+                    get_vehicle.state = get_vehicle.state
+                    get_vehicle.city = get_vehicle.city
+                    get_vehicle.zip_code = get_vehicle.zip_code
+                    get_vehicle.email = get_vehicle.email
+                    get_vehicle.agent_id = get_vehicle.agent_id
+                    get_vehicle.user_id = get_vehicle.user_id
+                    get_vehicle.save()
+                    return redirect('RTO')
             else:
                 return redirect('RTO')
         else:
