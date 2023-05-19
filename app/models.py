@@ -19,7 +19,7 @@ class AgentVehicle(models.Model):
     mileage = models.PositiveIntegerField()
     number_etched_into_windows = models.CharField(max_length=50)
     vehicle_name = models.CharField(max_length=50)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=1000)
     address = models.CharField(max_length=150)
     state = models.CharField(max_length=50)
     city = models.CharField(max_length=50)

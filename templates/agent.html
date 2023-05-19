@@ -1,760 +1,1187 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <title>Agent Vehicle Information Form</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script>
-    window.history.pushState(null, null, window.location.href);
-    window.onpopstate = function () {
+  <head>
+    <title>Agent Vehicle Information Form</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
       window.history.pushState(null, null, window.location.href);
-    };
-  </script>
-</head>
-<style>
-  .error {
-    color: red;
-  }
-</style>
+      window.onpopstate = function () {
+        window.history.pushState(null, null, window.location.href);
+      };
+    </script>
+  </head>
+  <style>
+    .error {
+      color: red;
+    }
+  </style>
+  <body>
+    <div class="container-fluid">
+      {% for i in agent %}
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">AGENT</a>
+        <div class="navbar-collapse justify-content-end">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="#">{{i.username}}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      {% endfor %} {% if registered %}
+      <div class="row">
+        <div class="col-10">
+          <h2>Add Vehicle Information</h2>
+        </div>
+        <div class="col-2 mt-2"></div>
+      </div>
+      <br />
+      {{registered}}
+      <form
+        action="{% url 'agentVehicleAddForm' %}"
+        class="ajax"
+        name="Form"
+        method="post"
+      >
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vehicleYear">Vehicle Year:</label>
+              <input
+                type="number"
+                class="form-control"
+                name="vehicleYear"
+                id="vehicleYear"
+                value="{{vehicleYear}}"
+                placeholder="Year"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vehicleMake">Vehicle Make:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="vehicleMake"
+                id="vehicleMake"
+                value="{{vehicleMake}}"
+                placeholder="Vehicle Make"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="nesw">Number Etched into side Windows:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="nesw"
+                id="nesw"
+                value="{{nesw}}"
+                placeholder="Number Etched into side Windows"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vehicleModel">Vehicle Model:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="vehicleModel"
+                id="vehicleModel"
+                value="{{vehicleModel}}"
+                placeholder="Vehicle Model"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="color">Color:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="color"
+                id="color"
+                value="{{color}}"
+                placeholder="color"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="mileage">Mileage:</label>
+              <input
+                type="number"
+                class="form-control"
+                name="mileage"
+                id="mileage"
+                value="{{mileage}}"
+                placeholder="Enter Mileage"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vehiclename">Vehicle Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="vehiclename"
+                id="vehiclename"
+                value="{{vehiclename}}"
+                placeholder="Vehicle Name"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vin Number"
+                >Vehicle Identification Number (VIN)</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                name="vin_number"
+                id="vin_number"
+                value="{{vin_number}}"
+                placeholder="Chassis Number"
+                maxlength="17"
+                required
+              />
+              <div class="error" id="vinErr">
+                This Vehicle Identification Number (VIN) already registered
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <h2 for="address">Owner Info</h2>
+          </div>
+        </div>
 
-<body>
-  <div class="container-fluid">
-    {% for i in agent %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">AGENT</a>
-      <div class="navbar-collapse justify-content-end">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="#">{{i.username}}</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-          </li> 
-        </ul>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="name">Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="name"
+                id="name"
+                value="{{name}}"
+                placeholder="Name"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="address">Address:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="address"
+                id="address"
+                value="{{address}}"
+                placeholder="Address"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="state">District:</label>
+              <select
+                class="form-control"
+                name="districtSelect"
+                id="districtSelect"
+                onchange="showCities()"
+                required
+              >
+                <option value="{{districtSelect}}">{{districtSelect}}</option>
+                <option value="Alappuzha">Alappuzha</option>
+                <option value="Ernakulam">Ernakulam</option>
+                <option value="Idukki">Idukki</option>
+                <option value="Kannur">Kannur</option>
+                <option value="Kasaragod">Kasaragod</option>
+                <option value="Kollam">Kollam</option>
+                <option value="Kottayam">Kottayam</option>
+                <option value="Kozhikode">Kozhikode</option>
+                <option value="Malappuram">Malappuram</option>
+                <option value="Palakkad">Palakkad</option>
+                <option value="Pathanamthitta">Pathanamthitta</option>
+                <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                <option value="Thrissur">Thrissur</option>
+                <option value="Wayanad">Wayanad</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="city">City:</label>
+              <select
+                class="form-control"
+                name="citySelect"
+                id="citySelect"
+                required
+              >
+                <option value="{{citySelect}}">{{citySelect}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="zip">Zip:</label>
+              <input
+                class="form-control"
+                name="zip"
+                id="zip"
+                value="{{zip}}"
+                placeholder="Postal Code"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                type = "number"
+                maxlength = "6"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input
+                type="email"
+                class="form-control"
+                name="email"
+                id="email"
+                value="{{email}}"
+                placeholder="Enter Email"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+        <a href="{% url 'agent' %}"
+          ><button type="button" class="btn btn-secondary">Cancel</button></a
+        >
+      </form>
+      {% elif registered_id %}
+      <div class="row">
+        <div class="col-10">
+          <h2>Edit Vehicle Information</h2>
+        </div>
+        <div class="col-2 mt-2"></div>
       </div>
-    </nav>
-    {% endfor %}
+      <br />
+      <form
+        action="{% url 'agentVehicleEditFormSubmit' veh_id %}"
+        class="ajax"
+        name="Form"
+        method="post"
+      >
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vehicleYear">Vehicle Year:</label>
+              <input
+                type="number"
+                class="form-control"
+                name="vehicleYear"
+                id="vehicleYear"
+                value="{{vehicleYear}}"
+                placeholder="Year"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vehicleMake">Vehicle Make:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="vehicleMake"
+                id="vehicleMake"
+                value="{{vehicleMake}}"
+                placeholder="Vehicle Make"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="nesw">Number Etched into side Windows:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="nesw"
+                id="nesw"
+                value="{{nesw}}"
+                placeholder="Number Etched into side Windows"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vehicleModel">Vehicle Model:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="vehicleModel"
+                id="vehicleModel"
+                value="{{vehicleModel}}"
+                placeholder="Vehicle Model"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="color">Color:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="color"
+                id="color"
+                value="{{color}}"
+                placeholder="color"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="mileage">Mileage:</label>
+              <input
+                type="number"
+                class="form-control"
+                name="mileage"
+                id="mileage"
+                value="{{mileage}}"
+                placeholder="Enter Mileage"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vehiclename">Vehicle Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="vehiclename"
+                id="vehiclename"
+                value="{{vehiclename}}"
+                placeholder="Vehicle Name"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vin Number"
+                >Vehicle Identification Number (VIN)</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                name="vin_number"
+                id="vin_number"
+                value="{{vin_number}}"
+                placeholder="Chassis Number"
+                maxlength="17"
+                required
+              />
+              <div class="error" id="vinErr">
+                This Vehicle Identification Number (VIN) already registered
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <h2 for="address">Owner Info</h2>
+          </div>
+        </div>
 
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="name">Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="name"
+                id="name"
+                value="{{name}}"
+                placeholder="Name"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="address">Address:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="address"
+                id="address"
+                value="{{address}}"
+                placeholder="Address"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="state">District:</label>
+              <select
+                class="form-control"
+                name="districtSelect"
+                id="districtSelect"
+                onchange="showCities()"
+                required
+              >
+                <option value="{{districtSelect}}">{{districtSelect}}</option>
+                <option value="Alappuzha">Alappuzha</option>
+                <option value="Ernakulam">Ernakulam</option>
+                <option value="Idukki">Idukki</option>
+                <option value="Kannur">Kannur</option>
+                <option value="Kasaragod">Kasaragod</option>
+                <option value="Kollam">Kollam</option>
+                <option value="Kottayam">Kottayam</option>
+                <option value="Kozhikode">Kozhikode</option>
+                <option value="Malappuram">Malappuram</option>
+                <option value="Palakkad">Palakkad</option>
+                <option value="Pathanamthitta">Pathanamthitta</option>
+                <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                <option value="Thrissur">Thrissur</option>
+                <option value="Wayanad">Wayanad</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="city">City:</label>
+              <select
+                class="form-control"
+                name="citySelect"
+                id="citySelect"
+                required
+              >
+                <option value="{{citySelect}}">{{citySelect}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="zip">Zip:</label>
+              <input
+                class="form-control"
+                name="zip"
+                id="zip"
+                value="{{zip}}"
+                placeholder="Postal Code"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                type = "number"
+                maxlength = "6"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input
+                type="email"
+                class="form-control"
+                name="email"
+                id="email"
+                value="{{email}}"
+                placeholder="Enter Email"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+        <a href="{% url 'agent' %}"
+          ><button type="button" class="btn btn-secondary">Cancel</button></a
+        >
+      </form>
+      {% elif vehicle_list_edit %}
+      <div class="row">
+        <div class="col-10">
+          <h2>Edit Vehicle Information</h2>
+        </div>
+        <div class="col-2 mt-2"></div>
+      </div>
+      <br />
+      {% for ve in vehicle_list_edit %}
+      <form
+        action="{% url 'agentVehicleEditFormSubmit' ve.id %}"
+        class="ajax"
+        name="Form"
+        method="post"
+      >
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vehicleYear">Vehicle Year:</label>
+              <input
+                type="number"
+                class="form-control"
+                name="vehicleYear"
+                id="vehicleYear"
+                value="{{ve.vehicle_year}}"
+                placeholder="Year"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vehicleMake">Vehicle Make:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="vehicleMake"
+                id="vehicleMake"
+                value="{{ve.vehicle_make}}"
+                placeholder="Vehicle Make"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="nesw">Number Etched into side Windows:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="nesw"
+                id="nesw"
+                value="{{ve.number_etched_into_windows}}"
+                placeholder="Number Etched into side Windows"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vehicleModel">Vehicle Model:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="vehicleModel"
+                id="vehicleModel"
+                value="{{ve.vehicle_model}}"
+                placeholder="Vehicle Model"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="color">Color:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="color"
+                id="color"
+                value="{{ve.color}}"
+                placeholder="color"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="mileage">Mileage:</label>
+              <input
+                type="number"
+                class="form-control"
+                name="mileage"
+                id="mileage"
+                value="{{ve.mileage}}"
+                placeholder="Enter Mileage"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vehiclename">Vehicle Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="vehiclename"
+                id="vehiclename"
+                value="{{ve.number_etched_into_windows}}"
+                placeholder="Vehicle Name"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vin Number"
+                >Vehicle Identification Number (VIN)</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                name="vin_number"
+                id="vin_number"
+                value="{{ve.vin_number}}"
+                placeholder="Chassis Number"
+                maxlength="17"
+                required
+              />
+              {% if registered_id %}
+              <div class="error" id="vinErr">
+                This Vehicle Identification Number (VIN) already registered
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <h2 for="address">Owner Info</h2>
+          </div>
+        </div>
 
-    {% if registered %}
-    <div class="row">
-      <div class="col-10">
-        <h2>Add Vehicle Information</h2>
-      </div>
-      <div class="col-2 mt-2">
-      </div>
-    </div><br>
-    {{registered}}
-    <form action="{% url 'agentVehicleAddForm' %}" class="ajax" name="Form" method="post">
-      {% csrf_token %}
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="name">Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="name"
+                id="name"
+                value="{{ve.name}}"
+                placeholder="Name"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="address">Address:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="address"
+                id="address"
+                value="{{ve.address}}"
+                placeholder="Address"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="state">District:</label>
+              <select
+                class="form-control"
+                name="districtSelect"
+                id="districtSelect"
+                onchange="showCities()"
+                required
+              >
+                <option value="{{ve.state}}">{{ve.state}}</option>
+                <option value="Alappuzha">Alappuzha</option>
+                <option value="Ernakulam">Ernakulam</option>
+                <option value="Idukki">Idukki</option>
+                <option value="Kannur">Kannur</option>
+                <option value="Kasaragod">Kasaragod</option>
+                <option value="Kollam">Kollam</option>
+                <option value="Kottayam">Kottayam</option>
+                <option value="Kozhikode">Kozhikode</option>
+                <option value="Malappuram">Malappuram</option>
+                <option value="Palakkad">Palakkad</option>
+                <option value="Pathanamthitta">Pathanamthitta</option>
+                <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                <option value="Thrissur">Thrissur</option>
+                <option value="Wayanad">Wayanad</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="city">City:</label>
+              <select
+                class="form-control"
+                name="citySelect"
+                id="citySelect"
+                required
+              >
+                <option value="{{ve.city}}">{{ve.city}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="zip">Zip:</label>
+              <input
+                class="form-control"
+                name="zip"
+                id="zip"
+                value="{{ve.zip_code}}"
+                placeholder="Postal Code"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                type = "number"
+                maxlength = "6"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input
+                type="email"
+                class="form-control"
+                name="email"
+                id="email"
+                value="{{ve.email}}"
+                placeholder="Enter Email"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+        <a href="{% url 'agent' %}"
+          ><button type="button" class="btn btn-secondary">Cancel</button></a
+        >
+      </form>
+      {% endfor %} {% else %}
       <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehicleYear">Vehicle Year:</label>
-            <input type="number" class="form-control" name="vehicleYear" id="vehicleYear" value="{{vehicleYear}}"
-              placeholder="Year" required>
-          </div>
+        <div class="col-10">
+          <h2>Add Vehicle Information</h2>
         </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehicleMake">Vehicle Make:</label>
-            <input type="text" class="form-control" name="vehicleMake" id="vehicleMake" value="{{vehicleMake}}"
-              placeholder="Vehicle Make" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="nesw">Number Etched into side Windows:</label>
-            <input type="text" class="form-control" name="nesw" id="nesw" value="{{nesw}}"
-              placeholder="Number Etched into side Windows" required>
-          </div>
-        </div>
+        <div class="col-2 mt-2"></div>
       </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehicleModel">Vehicle Model:</label>
-            <input type="text" class="form-control" name="vehicleModel" id="vehicleModel" value="{{vehicleModel}}"
-              placeholder="Vehicle Model" required>
+      <br />
+      <form
+        action="{% url 'agentVehicleAddForm' %}"
+        class="ajax"
+        name="Form"
+        method="post"
+      >
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vehicleYear">Vehicle Year:</label>
+              <input
+                type="number"
+                class="form-control"
+                name="vehicleYear"
+                id="vehicleYear"
+                placeholder="Year"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vehicleMake">Vehicle Make:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="vehicleMake"
+                id="vehicleMake"
+                placeholder="Vehicle Make"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="nesw">Number Etched into side Windows:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="nesw"
+                id="nesw"
+                placeholder="Number Etched into side Windows"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vehicleModel">Vehicle Model:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="vehicleModel"
+                id="vehicleModel"
+                placeholder="Vehicle Model"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="color">Color:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="color"
+                id="color"
+                placeholder="color"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="mileage">Mileage:</label>
+              <input
+                type="number"
+                class="form-control"
+                name="mileage"
+                id="mileage"
+                placeholder="Enter Mileage"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vehiclename">Vehicle Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="vehiclename"
+                id="vehiclename"
+                placeholder="Vehicle Name"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="vin Number"
+                >Vehicle Identification Number (VIN)</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                name="vin_number"
+                id="vin_number"
+                placeholder="Chassis Number"
+                maxlength="17"
+                required
+              />
+              <div class="error" id="vinErr"></div>
+            </div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
-            <label for="color">Color:</label>
-            <input type="text" class="form-control" name="color" id="color" value="{{color}}" placeholder="color"
-              required>
+            <h2 for="address">Owner Info</h2>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="mileage">Mileage:</label>
-            <input type="number" class="form-control" name="mileage" id="mileage" value="{{mileage}}"
-              placeholder="Enter Mileage" required>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehiclename">Vehicle Name:</label>
-            <input type="text" class="form-control" name="vehiclename" id="vehiclename" value="{{vehiclename}}"
-              placeholder="Vehicle Name" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vin Number">Vehicle Identification Number (VIN)</label>
-            <input type="text" class="form-control" name="vin_number" id="vin_number" value="{{vin_number}}"
-              placeholder="Chassis Number" maxlength="17" required>
-            <div class="error" id="vinErr">This Vehicle Identification Number (VIN) already registered</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group">
-          <h2 for="address">Owner Info</h2>
-        </div>
-      </div>
 
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" class="form-control" name="name" id="name" value="{{name}}" placeholder="Name" required>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="name">Name:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="name"
+                id="name"
+                placeholder="Name"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="address">Address:</label>
+              <input
+                type="text"
+                class="form-control"
+                name="address"
+                id="address"
+                placeholder="Address"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="state">District:</label>
+              <select
+                class="form-control"
+                name="districtSelect"
+                id="districtSelect"
+                onchange="showCities()"
+                required
+              >
+                <option value="">Select a District</option>
+                <option value="Alappuzha">Alappuzha</option>
+                <option value="Ernakulam">Ernakulam</option>
+                <option value="Idukki">Idukki</option>
+                <option value="Kannur">Kannur</option>
+                <option value="Kasaragod">Kasaragod</option>
+                <option value="Kollam">Kollam</option>
+                <option value="Kottayam">Kottayam</option>
+                <option value="Kozhikode">Kozhikode</option>
+                <option value="Malappuram">Malappuram</option>
+                <option value="Palakkad">Palakkad</option>
+                <option value="Pathanamthitta">Pathanamthitta</option>
+                <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                <option value="Thrissur">Thrissur</option>
+                <option value="Wayanad">Wayanad</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="city">City:</label>
+              <select
+                class="form-control"
+                name="citySelect"
+                id="citySelect"
+                required
+              ></select>
+              <h7 id="districtText" style="display: show"
+                >**select a District First</h7
+              >
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="zip">Zip:</label>
+              <input
+                class="form-control"
+                name="zip"
+                id="zip"
+                placeholder="Postal Code"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                type = "number"
+                maxlength = "6"
+                required
+              />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input
+                type="email"
+                class="form-control"
+                name="email"
+                id="email"
+                placeholder="Enter Email"
+                required
+              />
+            </div>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="address">Address:</label>
-            <input type="text" class="form-control" name="address" id="address" value="{{address}}"
-              placeholder="Address" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="state">District:</label>
-            <select class="form-control" name="districtSelect" id="districtSelect" onchange="showCities()" required>
-              <option value="{{districtSelect}}">{{districtSelect}}</option>
-              <option value="Alappuzha">Alappuzha</option>
-              <option value="Ernakulam">Ernakulam</option>
-              <option value="Idukki">Idukki</option>
-              <option value="Kannur">Kannur</option>
-              <option value="Kasaragod">Kasaragod</option>
-              <option value="Kollam">Kollam</option>
-              <option value="Kottayam">Kottayam</option>
-              <option value="Kozhikode">Kozhikode</option>
-              <option value="Malappuram">Malappuram</option>
-              <option value="Palakkad">Palakkad</option>
-              <option value="Pathanamthitta">Pathanamthitta</option>
-              <option value="Thiruvananthapuram">Thiruvananthapuram</option>
-              <option value="Thrissur">Thrissur</option>
-              <option value="Wayanad">Wayanad</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="city">City:</label>
-            <select class="form-control" name="citySelect" id="citySelect" required>
-              <option value="{{citySelect}}">{{citySelect}}</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="zip">Zip:</label>
-            <input type="number" class="form-control" name="zip" id="zip" value="{{zip}}" placeholder="Postal Code"
-              required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" name="email" id="email" value="{{email}}" placeholder="Enter Email"
-              required>
-          </div>
-        </div>
-      </div>
-      <button type="submit" class="btn btn-success">Submit</button>
-      <a href="{% url 'agent' %}"><button type="button" class="btn btn-secondary">Cancel</button></a>
-    </form>
-    {% elif registered_id %}
-    <div class="row">
-      <div class="col-10">
-        <h2>Edit Vehicle Information</h2>
-      </div>
-      <div class="col-2 mt-2">
-      </div>
-    </div><br>
-    <form action="{% url 'agentVehicleEditFormSubmit' veh_id %}" class="ajax" name="Form" method="post">
-      {% csrf_token %}
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehicleYear">Vehicle Year:</label>
-            <input type="number" class="form-control" name="vehicleYear" id="vehicleYear" value="{{vehicleYear}}"
-              placeholder="Year" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehicleMake">Vehicle Make:</label>
-            <input type="text" class="form-control" name="vehicleMake" id="vehicleMake" value="{{vehicleMake}}"
-              placeholder="Vehicle Make" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="nesw">Number Etched into side Windows:</label>
-            <input type="text" class="form-control" name="nesw" id="nesw" value="{{nesw}}"
-              placeholder="Number Etched into side Windows" required>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehicleModel">Vehicle Model:</label>
-            <input type="text" class="form-control" name="vehicleModel" id="vehicleModel" value="{{vehicleModel}}"
-              placeholder="Vehicle Model" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="color">Color:</label>
-            <input type="text" class="form-control" name="color" id="color" value="{{color}}" placeholder="color"
-              required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="mileage">Mileage:</label>
-            <input type="number" class="form-control" name="mileage" id="mileage" value="{{mileage}}"
-              placeholder="Enter Mileage" required>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehiclename">Vehicle Name:</label>
-            <input type="text" class="form-control" name="vehiclename" id="vehiclename" value="{{vehiclename}}"
-              placeholder="Vehicle Name" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vin Number">Vehicle Identification Number (VIN)</label>
-            <input type="text" class="form-control" name="vin_number" id="vin_number" value="{{vin_number}}"
-              placeholder="Chassis Number" maxlength="17" required>
-            <div class="error" id="vinErr">This Vehicle Identification Number (VIN) already registered</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group">
-          <h2 for="address">Owner Info</h2>
-        </div>
-      </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+        <a href="{% url 'listPageAgent' %}"
+          ><button type="button" class="btn btn-primary">Show List</button></a
+        >
+      </form>
+      {% endif %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#districtSelect").on("change", function () {
+          var selectedDistrict = $(this).val();
 
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" class="form-control" name="name" id="name" value="{{name}}" placeholder="Name" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="address">Address:</label>
-            <input type="text" class="form-control" name="address" id="address" value="{{address}}"
-              placeholder="Address" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="state">District:</label>
-            <select class="form-control" name="districtSelect" id="districtSelect" onchange="showCities()" required>
-              <option value="{{districtSelect}}">{{districtSelect}}</option>
-              <option value="Alappuzha">Alappuzha</option>
-              <option value="Ernakulam">Ernakulam</option>
-              <option value="Idukki">Idukki</option>
-              <option value="Kannur">Kannur</option>
-              <option value="Kasaragod">Kasaragod</option>
-              <option value="Kollam">Kollam</option>
-              <option value="Kottayam">Kottayam</option>
-              <option value="Kozhikode">Kozhikode</option>
-              <option value="Malappuram">Malappuram</option>
-              <option value="Palakkad">Palakkad</option>
-              <option value="Pathanamthitta">Pathanamthitta</option>
-              <option value="Thiruvananthapuram">Thiruvananthapuram</option>
-              <option value="Thrissur">Thrissur</option>
-              <option value="Wayanad">Wayanad</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="city">City:</label>
-            <select class="form-control" name="citySelect" id="citySelect" required>
-              <option value="{{citySelect}}">{{citySelect}}</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="zip">Zip:</label>
-            <input type="number" class="form-control" name="zip" id="zip" value="{{zip}}" placeholder="Postal Code"
-              required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" name="email" id="email" value="{{email}}" placeholder="Enter Email"
-              required>
-          </div>
-        </div>
-      </div>
-      <button type="submit" class="btn btn-success">Submit</button>
-      <a href="{% url 'agent' %}"><button type="button" class="btn btn-secondary">Cancel</button></a>
-    </form>
-    {% elif vehicle_list_edit %}
-    <div class="row">
-      <div class="col-10">
-        <h2>Edit Vehicle Information</h2>
-      </div>
-      <div class="col-2 mt-2">
-      </div>
-    </div><br>
-    {% for ve in vehicle_list_edit %}
-    <form action="{% url 'agentVehicleEditFormSubmit' ve.id %}" class="ajax" name="Form" method="post">
-      {% csrf_token %}
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehicleYear">Vehicle Year:</label>
-            <input type="number" class="form-control" name="vehicleYear" id="vehicleYear" value="{{ve.vehicle_year}}"
-              placeholder="Year" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehicleMake">Vehicle Make:</label>
-            <input type="text" class="form-control" name="vehicleMake" id="vehicleMake" value="{{ve.vehicle_make}}"
-              placeholder="Vehicle Make" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="nesw">Number Etched into side Windows:</label>
-            <input type="text" class="form-control" name="nesw" id="nesw" value="{{ve.number_etched_into_windows}}"
-              placeholder="Number Etched into side Windows" required>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehicleModel">Vehicle Model:</label>
-            <input type="text" class="form-control" name="vehicleModel" id="vehicleModel" value="{{ve.vehicle_model}}"
-              placeholder="Vehicle Model" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="color">Color:</label>
-            <input type="text" class="form-control" name="color" id="color" value="{{ve.color}}" placeholder="color"
-              required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="mileage">Mileage:</label>
-            <input type="number" class="form-control" name="mileage" id="mileage" value="{{ve.mileage}}"
-              placeholder="Enter Mileage" required>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehiclename">Vehicle Name:</label>
-            <input type="text" class="form-control" name="vehiclename" id="vehiclename"
-              value="{{ve.number_etched_into_windows}}" placeholder="Vehicle Name" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vin Number">Vehicle Identification Number (VIN)</label>
-            <input type="text" class="form-control" name="vin_number" id="vin_number" value="{{ve.vin_number}}"
-              placeholder="Chassis Number" maxlength="17" required>
-            {% if registered_id %}
-            <div class="error" id="vinErr">This Vehicle Identification Number (VIN) already registered</div>
-            {% endif %}
-
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group">
-          <h2 for="address">Owner Info</h2>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" class="form-control" name="name" id="name" value="{{ve.name}}" placeholder="Name"
-              required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="address">Address:</label>
-            <input type="text" class="form-control" name="address" id="address" value="{{ve.address}}"
-              placeholder="Address" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="state">District:</label>
-            <select class="form-control" name="districtSelect" id="districtSelect" onchange="showCities()" required>
-              <option value="{{ve.state}}">{{ve.state}}</option>
-              <option value="Alappuzha">Alappuzha</option>
-              <option value="Ernakulam">Ernakulam</option>
-              <option value="Idukki">Idukki</option>
-              <option value="Kannur">Kannur</option>
-              <option value="Kasaragod">Kasaragod</option>
-              <option value="Kollam">Kollam</option>
-              <option value="Kottayam">Kottayam</option>
-              <option value="Kozhikode">Kozhikode</option>
-              <option value="Malappuram">Malappuram</option>
-              <option value="Palakkad">Palakkad</option>
-              <option value="Pathanamthitta">Pathanamthitta</option>
-              <option value="Thiruvananthapuram">Thiruvananthapuram</option>
-              <option value="Thrissur">Thrissur</option>
-              <option value="Wayanad">Wayanad</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="city">City:</label>
-            <select class="form-control" name="citySelect" id="citySelect" required>
-              <option value="{{ve.city}}">{{ve.city}}</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="zip">Zip:</label>
-            <input type="number" class="form-control" name="zip" id="zip" value="{{ve.zip_code}}"
-              placeholder="Postal Code" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" name="email" id="email" value="{{ve.email}}"
-              placeholder="Enter Email" required>
-          </div>
-        </div>
-      </div>
-      <button type="submit" class="btn btn-success">Submit</button>
-      <a href="{% url 'agent' %}"><button type="button" class="btn btn-secondary">Cancel</button></a>
-    </form>
-    {% endfor %}
-    {% else %}
-    <div class="row">
-      <div class="col-10">
-        <h2>Add Vehicle Information</h2>
-      </div>
-      <div class="col-2 mt-2">
-      </div>
-    </div><br>
-    <form action="{% url 'agentVehicleAddForm' %}" class="ajax" name="Form" method="post">
-      {% csrf_token %}
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehicleYear">Vehicle Year:</label>
-            <input type="number" class="form-control" name="vehicleYear" id="vehicleYear" placeholder="Year" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehicleMake">Vehicle Make:</label>
-            <input type="text" class="form-control" name="vehicleMake" id="vehicleMake" placeholder="Vehicle Make"
-              required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="nesw">Number Etched into side Windows:</label>
-            <input type="text" class="form-control" name="nesw" id="nesw" placeholder="Number Etched into side Windows"
-              required>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehicleModel">Vehicle Model:</label>
-            <input type="text" class="form-control" name="vehicleModel" id="vehicleModel" placeholder="Vehicle Model"
-              required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="color">Color:</label>
-            <input type="text" class="form-control" name="color" id="color" placeholder="color" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="mileage">Mileage:</label>
-            <input type="number" class="form-control" name="mileage" id="mileage" placeholder="Enter Mileage" required>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vehiclename">Vehicle Name:</label>
-            <input type="text" class="form-control" name="vehiclename" id="vehiclename" placeholder="Vehicle Name"
-              required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="vin Number">Vehicle Identification Number (VIN)</label>
-            <input type="text" class="form-control" name="vin_number" id="vin_number" placeholder="Chassis Number"
-              maxlength="17" required>
-            <div class="error" id="vinErr"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group">
-          <h2 for="address">Owner Info</h2>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" class="form-control" name="name" id="name" placeholder="Name" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="address">Address:</label>
-            <input type="text" class="form-control" name="address" id="address" placeholder="Address" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="state">District:</label>
-            <select class="form-control" name="districtSelect" id="districtSelect" onchange="showCities()" required>
-              <option value="">Select a District</option>
-              <option value="Alappuzha">Alappuzha</option>
-              <option value="Ernakulam">Ernakulam</option>
-              <option value="Idukki">Idukki</option>
-              <option value="Kannur">Kannur</option>
-              <option value="Kasaragod">Kasaragod</option>
-              <option value="Kollam">Kollam</option>
-              <option value="Kottayam">Kottayam</option>
-              <option value="Kozhikode">Kozhikode</option>
-              <option value="Malappuram">Malappuram</option>
-              <option value="Palakkad">Palakkad</option>
-              <option value="Pathanamthitta">Pathanamthitta</option>
-              <option value="Thiruvananthapuram">Thiruvananthapuram</option>
-              <option value="Thrissur">Thrissur</option>
-              <option value="Wayanad">Wayanad</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="city">City:</label>
-            <select class="form-control" name="citySelect" id="citySelect" required>
-            </select>
-            <h7 id="districtText" style="display: show;">**select a District First</h7>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="zip">Zip:</label>
-            <input type="number" class="form-control" name="zip" id="zip" placeholder="Postal Code" required>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" name="email" id="email" placeholder="Enter Email" required>
-          </div>
-        </div>
-      </div>
-      <button type="submit" class="btn btn-success">Submit</button>
-      <a href="{% url 'listPageAgent' %}"><button type="button" class="btn btn-primary">Show List</button></a>
-    </form>
-    {% endif %}
-  </div>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    $(document).ready(function () {
-      $("#districtSelect").on("change", function () {
-        var selectedDistrict = $(this).val();
-
-        if (selectedDistrict === "") {
-          $("#districtText").show();
-        } else {
-          $("#districtText").hide();
-        }
+          if (selectedDistrict === "") {
+            $("#districtText").show();
+          } else {
+            $("#districtText").hide();
+          }
+        });
       });
-    });
-  </script>
-  <script>
-    // $("body").on("submit", "form.ajax", function (e) {
-    //   e.preventDefault();
+    </script>
+    <script>
+      // $("body").on("submit", "form.ajax", function (e) {
+      //   e.preventDefault();
 
-    //   $form = $(this);
-    //   $url = $form.attr("action");
-    //   let regex = /^\S+@\S+\.\S+$/;
-    //   var vinPattern = /^MA3[A-HJ-NPR-Z0-9]{11}$/;
+      //   $form = $(this);
+      //   $url = $form.attr("action");
+      //   let regex = /^\S+@\S+\.\S+$/;
+      //   var vinPattern = /^MA3[A-HJ-NPR-Z0-9]{11}$/;
 
-    //   if (!$.trim(document.Form.vin_number.value)) {
-    //     printError("vinErr", "Please enter vin");
-    //   } else if (vinPattern.test(document.Form.vin_number.value) === false) {
-    //     printError("vinErr", "Invalid VIN. VIN should consist of 17 characters (letters A-Z and numbers 0-9).");
-    //   } else {
-    //     e.currentTarget.submit();
-    //   }
+      //   if (!$.trim(document.Form.vin_number.value)) {
+      //     printError("vinErr", "Please enter vin");
+      //   } else if (vinPattern.test(document.Form.vin_number.value) === false) {
+      //     printError("vinErr", "Invalid VIN. VIN should consist of 17 characters (letters A-Z and numbers 0-9).");
+      //   } else {
+      //     e.currentTarget.submit();
+      //   }
 
-    // });
+      // });
 
-    // $("body").on("change keyup", "input,select,textarea", function (e) {
-    //   if ($.trim($(this).val())) {
-    //     $(this).nextAll("div.error").html("");
-    //   }
-    // });
-    function printError(Id, Msg) {
-      document.getElementById(Id).innerHTML = Msg;
-    }
-
-    function showCities() {
-      var districtSelect = document.getElementById("districtSelect");
-      var citySelect = document.getElementById("citySelect");
-
-      // Clear previous options
-      citySelect.innerHTML = '<option value="">Select a City</option>';
-
-      // Get selected district value
-      var selectedDistrict = districtSelect.value;
-
-      // Add cities based on the selected district
-      if (selectedDistrict === "Alappuzha") {
-        addCityOption("Alappuzha", citySelect);
-        addCityOption("Chengannur", citySelect);
-        addCityOption("Kayamkulam", citySelect);
-        addCityOption("Mavelikara", citySelect);
-        addCityOption("Haripad", citySelect);
-      } else if (selectedDistrict === "Ernakulam") {
-        addCityOption("Kochi", citySelect);
-        addCityOption("Aluva", citySelect);
-        addCityOption("Angamaly", citySelect);
-        addCityOption("Perumbavoor", citySelect);
-        addCityOption("Kothamangalam", citySelect);
-        addCityOption("Muvattupuzha", citySelect);
-      } else if (selectedDistrict === "Idukki") {
-        addCityOption("Idukki", citySelect);
-        addCityOption("Thodupuzha", citySelect);
-        addCityOption("Munnar", citySelect);
-        addCityOption("Nedumkandam", citySelect);
-        addCityOption("Adimali", citySelect);
-      } else if (selectedDistrict === "Kannur") {
-        addCityOption("Kannur", citySelect);
-        addCityOption("Thalassery", citySelect);
-        addCityOption("Mattannur", citySelect);
-        addCityOption("Iritty", citySelect);
-        addCityOption("Payyannur", citySelect);
-      } else if (selectedDistrict === "Kasaragod") {
-        addCityOption("Kasaragod", citySelect);
-        addCityOption("Kanhangad", citySelect);
-        addCityOption("Nileshwar", citySelect);
-        addCityOption("Cheruvathur", citySelect);
-        addCityOption("Manjeshwar", citySelect);
-      } else if (selectedDistrict === "Kollam") {
-        addCityOption("Kollam", citySelect);
-        addCityOption("Punalur", citySelect);
-        addCityOption("Karunagappally", citySelect);
-        addCityOption("Kottarakkara", citySelect);
-        addCityOption("Paravur", citySelect);
-      } else if (selectedDistrict === "Kottayam") {
-        addCityOption("Kottayam", citySelect);
-        addCityOption("Changanassery", citySelect);
-        addCityOption("Palai", citySelect);
-        addCityOption("Vaikom", citySelect);
-        addCityOption("Ettumanoor", citySelect);
-      } else if (selectedDistrict === "Kozhikode") {
-        addCityOption("Kozhikode", citySelect);
-        addCityOption("Vatakara", citySelect);
-        addCityOption("Koyilandy", citySelect);
-        addCityOption("Perambra", citySelect);
-        addCityOption("Ramanattukara", citySelect);
-      } else if (selectedDistrict === "Malappuram") {
-        addCityOption("Malappuram", citySelect);
-        addCityOption("Manjeri", citySelect);
-        addCityOption("Perinthalmanna", citySelect);
-        addCityOption("Tirur", citySelect);
-        addCityOption("Ponnani", citySelect);
-      } else if (selectedDistrict === "Palakkad") {
-        addCityOption("Palakkad", citySelect);
-        addCityOption("Ottapalam", citySelect);
-        addCityOption("Pattambi", citySelect);
-        addCityOption("Chittur-Thathamangalam", citySelect);
-        addCityOption("Shoranur", citySelect);
-      } else if (selectedDistrict === "Pathanamthitta") {
-        addCityOption("Pathanamthitta", citySelect);
-        addCityOption("Adoor", citySelect);
-        addCityOption("Thiruvalla", citySelect);
-        addCityOption("Ranni", citySelect);
-        addCityOption("Konni", citySelect);
-      } else if (selectedDistrict === "Thiruvananthapuram") {
-        addCityOption("Thiruvananthapuram", citySelect);
-        addCityOption("Neyyattinkara", citySelect);
-        addCityOption("Attingal", citySelect);
-        addCityOption("Nedumangad", citySelect);
-        addCityOption("Varkala", citySelect);
-      } else if (selectedDistrict === "Thrissur") {
-        addCityOption("Thrissur", citySelect);
-        addCityOption("Chalakudy", citySelect);
-        addCityOption("Kodungallur", citySelect);
-        addCityOption("Kunnamkulam", citySelect);
-        addCityOption("Irinjalakuda", citySelect);
-        addCityOption("Guruvayoor", citySelect);
-      } else if (selectedDistrict === "Wayanad") {
-        addCityOption("Kalpetta", citySelect);
-        addCityOption("Sulthan Bathery", citySelect);
-        addCityOption("Mananthavady", citySelect);
-        addCityOption("Vythiri", citySelect);
-        addCityOption("Meppadi", citySelect);
+      // $("body").on("change keyup", "input,select,textarea", function (e) {
+      //   if ($.trim($(this).val())) {
+      //     $(this).nextAll("div.error").html("");
+      //   }
+      // });
+      function printError(Id, Msg) {
+        document.getElementById(Id).innerHTML = Msg;
       }
-    }
 
-    function addCityOption(city, selectElement) {
-      var option = document.createElement("option");
-      option.text = city;
-      option.value = city;
-      selectElement.add(option);
-    }
-  </script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+      function showCities() {
+        var districtSelect = document.getElementById("districtSelect");
+        var citySelect = document.getElementById("citySelect");
 
+        // Clear previous options
+        citySelect.innerHTML = '<option value="">Select a City</option>';
+
+        // Get selected district value
+        var selectedDistrict = districtSelect.value;
+
+        // Add cities based on the selected district
+        if (selectedDistrict === "Alappuzha") {
+          addCityOption("Alappuzha", citySelect);
+          addCityOption("Chengannur", citySelect);
+          addCityOption("Kayamkulam", citySelect);
+          addCityOption("Mavelikara", citySelect);
+          addCityOption("Haripad", citySelect);
+        } else if (selectedDistrict === "Ernakulam") {
+          addCityOption("Kochi", citySelect);
+          addCityOption("Aluva", citySelect);
+          addCityOption("Angamaly", citySelect);
+          addCityOption("Perumbavoor", citySelect);
+          addCityOption("Kothamangalam", citySelect);
+          addCityOption("Muvattupuzha", citySelect);
+        } else if (selectedDistrict === "Idukki") {
+          addCityOption("Idukki", citySelect);
+          addCityOption("Thodupuzha", citySelect);
+          addCityOption("Munnar", citySelect);
+          addCityOption("Nedumkandam", citySelect);
+          addCityOption("Adimali", citySelect);
+        } else if (selectedDistrict === "Kannur") {
+          addCityOption("Kannur", citySelect);
+          addCityOption("Thalassery", citySelect);
+          addCityOption("Mattannur", citySelect);
+          addCityOption("Iritty", citySelect);
+          addCityOption("Payyannur", citySelect);
+        } else if (selectedDistrict === "Kasaragod") {
+          addCityOption("Kasaragod", citySelect);
+          addCityOption("Kanhangad", citySelect);
+          addCityOption("Nileshwar", citySelect);
+          addCityOption("Cheruvathur", citySelect);
+          addCityOption("Manjeshwar", citySelect);
+        } else if (selectedDistrict === "Kollam") {
+          addCityOption("Kollam", citySelect);
+          addCityOption("Punalur", citySelect);
+          addCityOption("Karunagappally", citySelect);
+          addCityOption("Kottarakkara", citySelect);
+          addCityOption("Paravur", citySelect);
+        } else if (selectedDistrict === "Kottayam") {
+          addCityOption("Kottayam", citySelect);
+          addCityOption("Changanassery", citySelect);
+          addCityOption("Palai", citySelect);
+          addCityOption("Vaikom", citySelect);
+          addCityOption("Ettumanoor", citySelect);
+        } else if (selectedDistrict === "Kozhikode") {
+          addCityOption("Kozhikode", citySelect);
+          addCityOption("Vatakara", citySelect);
+          addCityOption("Koyilandy", citySelect);
+          addCityOption("Perambra", citySelect);
+          addCityOption("Ramanattukara", citySelect);
+        } else if (selectedDistrict === "Malappuram") {
+          addCityOption("Malappuram", citySelect);
+          addCityOption("Manjeri", citySelect);
+          addCityOption("Perinthalmanna", citySelect);
+          addCityOption("Tirur", citySelect);
+          addCityOption("Ponnani", citySelect);
+        } else if (selectedDistrict === "Palakkad") {
+          addCityOption("Palakkad", citySelect);
+          addCityOption("Ottapalam", citySelect);
+          addCityOption("Pattambi", citySelect);
+          addCityOption("Chittur-Thathamangalam", citySelect);
+          addCityOption("Shoranur", citySelect);
+        } else if (selectedDistrict === "Pathanamthitta") {
+          addCityOption("Pathanamthitta", citySelect);
+          addCityOption("Adoor", citySelect);
+          addCityOption("Thiruvalla", citySelect);
+          addCityOption("Ranni", citySelect);
+          addCityOption("Konni", citySelect);
+        } else if (selectedDistrict === "Thiruvananthapuram") {
+          addCityOption("Thiruvananthapuram", citySelect);
+          addCityOption("Neyyattinkara", citySelect);
+          addCityOption("Attingal", citySelect);
+          addCityOption("Nedumangad", citySelect);
+          addCityOption("Varkala", citySelect);
+        } else if (selectedDistrict === "Thrissur") {
+          addCityOption("Thrissur", citySelect);
+          addCityOption("Chalakudy", citySelect);
+          addCityOption("Kodungallur", citySelect);
+          addCityOption("Kunnamkulam", citySelect);
+          addCityOption("Irinjalakuda", citySelect);
+          addCityOption("Guruvayoor", citySelect);
+        } else if (selectedDistrict === "Wayanad") {
+          addCityOption("Kalpetta", citySelect);
+          addCityOption("Sulthan Bathery", citySelect);
+          addCityOption("Mananthavady", citySelect);
+          addCityOption("Vythiri", citySelect);
+          addCityOption("Meppadi", citySelect);
+        }
+      }
+
+      function addCityOption(city, selectElement) {
+        var option = document.createElement("option");
+        option.text = city;
+        option.value = city;
+        selectElement.add(option);
+      }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
 </html>
